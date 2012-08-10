@@ -15,6 +15,7 @@
                 <para>Server and Core (with the Hyper-V role enabled), and Hyper-V Server</para>
             </listitem>
         </itemizedlist>
+    
     <title>"Installation Requirements"></title>
     <section>
         <title>Python 2.7.3</title>
@@ -27,6 +28,7 @@
              <listitem>The installation will put python in C:/python27.</listitem>
          </itemizedlist>
     </section>
+    
     <section>    
     <title>Setuptools-0.6c11.win32-py2.7</title>
         <para>You will require pip to install the necessary python module dependencies.  The installer will install under the C:\python27 directory structure. Setuptools for Python 2.7 for Windows can be download from here:</para>
@@ -35,13 +37,33 @@
         </link>
         <para></para>
     </section>
+    
     <section>
         <title>Python Dependencies</title>
+        <para>The following packages need to be downloaded and manually installed</para>
+        <itemizedlist>
+            <listitem>M2Crypto==0.21.1
+                <para>Download and run the installer from the following location:</para>
+                <link xlink:href="http://chandlerproject.org/pub/Project/MeTooCrypto/M2Crypto-0.21.1.win32-py2.7.exe">http://chandlerproject.org/pub/Project/MeTooCrypto/M2Crypto-0.21.1.win32-py2.7.exe</link>
+            </listitem>
+            <listitem>MySQL-python==1.2.3
+                <link xlink:href="http://codegood.com/download/10/">http://codegood.com/download/10/</link>
+            </listitem>
+            <listitem>SQLAlchemy==0.7.8</listitem>
+            <listitem>pywin32==217
+                <para>Download and run the installer from the following location</para>
+                <link xlink:href="http://sourceforge.net/projects/pywin32/files/pywin32/Build%20217/pywin32-217.win32-py2.7.exe">http://sourceforge.net/projects/pywin32/files/pywin32/Build%20217/pywin32-217.win32-py2.7.exe</link>
+            </listitem>
+            <listitem>greenlet==0.3.4
+                <para>Select the link below:</para>
+                <link xlink:href="http://www.lfd.uci.edu/~gohlke/pythonlibs/">http://www.lfd.uci.edu/~gohlke/pythonlibs/</link>
+                <para>You will need to scroll down to the section for the following file: greenlet-0.4.0.win32-py2.7.‌exe</para>
+                <para>Click on the file, to initiate the download.  Run the installer.</para>
+            </listitem>
+        </itemizedlist>
+        
         <para>The following python packages need to be installed via pip.</para>
         <itemizedlist>
-            <listitem>M2Crypto==0.21.1</listitem>
-            <listitem>MySQL-python==1.2.3</listitem>
-            <listitem>SQLAlchemy==0.7.8</listitem>
             <listitem>WebOb==1.0.8</listitem>
             <listitem>amqplib==1.0.2</listitem>
             <listitem>anyjson==0.3.1</listitem>
@@ -54,7 +76,7 @@
             <listitem>eventlet==0.9.16</listitem>
             <listitem>feedparser==5.1.2</listitem>
             <listitem>glance==2012.2</listitem>
-            <listitem>greenlet==0.3.4</listitem>
+
             <listitem>httplib2==0.7.4</listitem>
             <listitem>ipython==0.12.1</listitem>
             <listitem>iso8601==0.1.4</listitem>
@@ -74,7 +96,7 @@
             <listitem>pygments==1.5</listitem>
             <listitem>pylint==0.25.1</listitem>
             <listitem>python-novaclient==2012.1</listitem>
-            <listitem>pywin32==217</listitem>
+
             <listitem>repoze.lru==0.5</listitem>
             <listitem>routes==1.13</listitem>
             <listitem>sphinx==1.1.3</listitem>
@@ -83,19 +105,23 @@
             <listitem>tempita==0.5.1</listitem>
             <listitem>wmi==1.4.9</listitem>
             <listitem>wsgiref==0.1.2</listitem>
+            <listitem>python-cinderclient</listitem>
         </itemizedlist>
     </section>
     
     <title>Installation Architecture</title>
         <para>The following sections will discuss the how to prepare the Windows Hyper-V node for operation as an Openstack Compute node.  Unless stated otherwise, any configuration information should work for both the Windows 2008r2 and 2002 platforms.</para>
+        
         <section>
             <title>Configuring the Hyper-V Hyper-V node</title>
         <para></para>
         </section>
+        
         <section>
             <title>Local Storage Considerations</title>
             <para>Local storage on the compute node needs to have ample storage for storing the virtual machine images running on the compute nodes.   You may use a sinlge volume for all, or partition it into an OS volume and VM volume.   It is up to the individual deploying to decided.</para>
         </section>
+    
         <section>
         <title>Configure NTP</title>
             <para>Network time services must be configured to ensure proper operation of the Hyper-V compute node.  To set network time on your Hyper-V host  you will need to run the following commands</para>
@@ -105,10 +131,12 @@
                 <listitem>net start w32time</listitem>
          </itemizedlist>
         </section>
+   
         <section>
             <title>Configuring Your Hyper-V Bridge</title>
             <para></para>
         </section>
+
         <section>
             <title>Configuring Shared Nothing Live Migration</title>
             <para>Detailed information on the configuration of livemigration from Microsoft can be found here can be found here:</para>
@@ -157,8 +185,8 @@
                 <para>Here's an article that clarifies very well the various live migration options in Hyper-V:</para>
                 <link xlink:href="http://ariessysadmin.blogspot.ro/2012/04/hyper-v-live-migration-of-windows.html">http://ariessysadmin.blogspot.ro/2012/04/hyper-v-live-migration-of-windows.html</link>
             </para>
-        </para>
     </section>
+    
     <section>
         <title>Configuring Volume Support</title>
         <para>To prepare the Hyper-V node to be able to attach to volumes provided by nova-volume or cinder you must first make sure the Windows</para>
@@ -169,6 +197,7 @@
         <title>Using git on Windows to retrieve source</title>
         <para></para>
     </section>
+    
     <section>
         <title>Configuring Nova.conf</title>
         <para></para>
