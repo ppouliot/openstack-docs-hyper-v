@@ -42,28 +42,36 @@
         <title>Python Dependencies</title>
         <para>The following packages need to be downloaded and manually installed</para>
         <itemizedlist>
-            <listitem>M2Crypto==0.21.1
+            <listitem><title>M2Crypto==0.21.1</title> 
                 <para>Download and run the installer from the following location:</para>
                 <link xlink:href="http://chandlerproject.org/pub/Project/MeTooCrypto/M2Crypto-0.21.1.win32-py2.7.exe">http://chandlerproject.org/pub/Project/MeTooCrypto/M2Crypto-0.21.1.win32-py2.7.exe</link>
             </listitem>
-            <listitem>MySQL-python==1.2.3
+            
+            <listitem><title>MySQL-python==1.2.3</title>
                 <link xlink:href="http://codegood.com/download/10/">http://codegood.com/download/10/</link>
             </listitem>
-            <listitem>SQLAlchemy==0.7.8</listitem>
-            <listitem>pywin32==217
+
+            <listitem><title>pywin32==217</title>
                 <para>Download and run the installer from the following location</para>
                 <link xlink:href="http://sourceforge.net/projects/pywin32/files/pywin32/Build%20217/pywin32-217.win32-py2.7.exe">http://sourceforge.net/projects/pywin32/files/pywin32/Build%20217/pywin32-217.win32-py2.7.exe</link>
             </listitem>
-            <listitem>greenlet==0.3.4
+            
+            <listitem><title>greenlet==0.3.4</title>
                 <para>Select the link below:</para>
                 <link xlink:href="http://www.lfd.uci.edu/~gohlke/pythonlibs/">http://www.lfd.uci.edu/~gohlke/pythonlibs/</link>
-                <para>You will need to scroll down to the section for the following file: greenlet-0.4.0.win32-py2.7.‌exe</para>
-                <para>Click on the file, to initiate the download.  Run the installer.</para>
+                <para>You will need to scroll down to the greenlet section for the following file:
+                    greenlet-0.4.0.win32-py2.7.‌exe</para>
+                <para>Click on the file, to initiate the download. Once the download is compelete,
+                    run the installer.</para>
             </listitem>
         </itemizedlist>
         
-        <para>The following python packages need to be installed via pip.</para>
+        <para>The following python packages need to be installed via pip.  Running
+            c:\Python27\Scripts\pip.exe install "PACKAGENAME" using the packages listed below.
+            Please note that you do not need to supply the =="VERSION", it will automatically
+            download and install the latest.</para>
         <itemizedlist>
+            <listitem>SQLAlchemy==0.7.8</listitem>
             <listitem>WebOb==1.0.8</listitem>
             <listitem>amqplib==1.0.2</listitem>
             <listitem>anyjson==0.3.1</listitem>
