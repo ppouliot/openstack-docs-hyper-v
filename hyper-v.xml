@@ -1,44 +1,157 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <chapter xmlns="http://docbook.org/ns/docbook"
     xmlns:xi="http://www.w3.org/2001/XInclude"
-    xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
-    <title>OpenStack Compute Node for Hyper-V</title>
-    <para>Nova-compute can run as a 32bit service upon Microsoft's Hyper-V Hypervisor allowing Hyper-V compute nodes within an OpenStack Cloud.</para>
-    <para>Currently the following platforms are supported:</para>
-        <itemizedlist>
+    xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0"
+    xml:id="Hyper-V">
+    <?dbhtml stop-chunking?>
+    <title>Hyper-V</title>
+<para>It is posible to use Hyper-V as a compute node within an OpenStack Deployment.  The Nova-compute api runs as a 
+        32bit service directly upon the Windows platform with the Hyper-V role enabled. The necessary Python components
+        as well as the nova-compute service are installed directly onto the Windows Platform. Windows Clustering Services are 
+        not needed for functionality within the OpenStack infrastructure. The use of the Windows Server 2012 platform is 
+        recommend for the best experience and is the platform for active develpment. 
+        
+        The following Windows platforms have been tested as compute nodes:<itemizedlist>
             <listitem>
                 <title>Windows Server 2008r2</title>
-                <para>Both Server and Core with the Hyper-V role enabled</para>
+                <para>Both Server and Server Core with the Hyper-V role enabled (Live migration is not supported)</para>
             </listitem>
             <listitem>
                 <title>Windows Server 2012</title>
                 <para>Server and Core (with the Hyper-V role enabled), and Hyper-V Server</para>
             </listitem>
         </itemizedlist>
-    
-    <title>"Installation Requirements"></title>
-    <section>
+</para>
+    <section xml:id="installation-architecture"><title>Hyper-V Configuration</title>
+<para>The following sections will discuss the how to prepare the Windows Hyper-V node for
+            operation as an Openstack Compute node. Unless stated otherwise, any configuration
+            information should work for both the Windows 2008r2 and 2012 platforms.
+        <title>Local Storage Considerations</title>
+        <para>The Hyper-V compute node needs to have ample storage for storing the virtual
+            machine images running on the compute nodes. You may use a sinlge volume for all, or
+            partition it into an OS volume and VM volume. It is up to the individual deploying to
+            decide.</para>
+        <title>Configure NTP</title>
+        <para>Network time services must be configured to ensure proper operation of the Hyper-V
+            compute node. To set network time on your Hyper-V host you will need to run the
+            following commands</para>
+        <screen os="windows">
+            <prompt>C:\</prompt><userinput>net stop w32time</userinput>
+        </screen>
+        <screen os="windows">
+            <prompt>C:\</prompt><userinput>w32tm /config /manualpeerlist:pool.ntp.org,0x8 /syncfromflags:MANUAL</userinput>
+        </screen>
+        <screen os="windows">
+            <prompt>C:\</prompt><userinput>net start w32time</userinput>
+        </screen>
+        <title>Configuring Your Hyper-V Bridge</title>
+    <title>Enable iSCSI Initator Service</title>
+    <para>To prepare the Hyper-V node to be able to attach to volumes provided by nova-volume
+        or cinder you must first make sure the Windows iSCSI initiator service is running and started automatically.</para>
+    <screen os="windows">
+            <prompt>C:\</prompt><userinput>sc start MSiSCSI</userinput>
+        </screen>
+    <screen os="windows">
+            <prompt>C:\</prompt><userinput>sc config MSiSCSI start="auto"</userinput>
+        </screen>
+
+</para>
+        
+        <title>Configuring Shared Nothing Live Migration</title>
+        <para>Detailed information on the configuration of live migration can be found here:
+            <link
+                xlink:href="http://technet.microsoft.com/en-us/library/jj134199.aspx"
+                >http://technet.microsoft.com/en-us/library/jj134199.aspx</link></para>
+            <para>The following outlines the steps of shared nothing live migration.
+            <itemizedlist>
+                <listitem><para>1) The target hosts ensures that live migration is enabled and properly
+                    configured in Hyper-V.</para></listitem>
+                <listitem><para>2) The target hosts checks if the image to be migrated requires a base VHD
+                    and pulls it from Glance if not already available on the target host.</para></listitem>
+                <listitem><para>3) The source hosts ensures that live migration is enabled and properly
+                    configured in Hyper-V</para></listitem>
+                <listitem><para>4) The source hosts initialtes a Hyper-V live migration</para></listitem>
+                <listitem><para>5) The source hosts communicates to the manager the outcome of the
+                    operation</para></listitem>
+            </itemizedlist> 
+            </para>
+                
+            <para>The following two configuration options/flags are needed in order to support Hyper-V
+            live migration and must be added to your nova.conf on the Hyper-V compute node:<itemizedlist>
+                <listitem>
+                    <literal>instances_shared_storage=False</literal>
+                    <para>This needed to support "shared nothing" Hyper-V live migrations. It is
+                        used in nova/compute/manager.py</para>
+                </listitem>
+                <listitem>
+                    <literal>limit_cpu_features=True</literal>
+                    <para>This flag is needed to support live migration to hosts with different CPU
+                        features. This flag is checked during instance creation in order to limit
+                        the CPU features used by the VM.</para>
+                </listitem>
+                <listitem>
+                    <literal>instances_path=DRIVELETTER:\PATH\TO\YOUR\INSTANCES</literal>
+                </listitem>
+            </itemizedlist>
+            </para>
+            Additional Requirements:<itemizedlist>
+                <listitem>
+                    <para>Hyper-V 2012 RC or Windows Server 2012 RC with Hyper-V role enabled</para>
+                </listitem>
+                <listitem>
+                    <para>A Windows domain controller with the Hyper-V compute nodes as domain members</para>
+                </listitem>
+                <listitem>
+                    <para>The instances_path command line option/flag needs to be the the same on
+                        all hosts</para>
+                </listitem>
+                <listitem>
+                    <para>The openstack-compute service deployed with the setup must run with
+                        domain credentials. You can set the service credentials with: sc config openstack-compute
+                        obj="DOMAIN\username" password="password".</para>
+                </listitem>
+            </itemizedlist>
+            <title>How to setup live migration on Hyper-V</title>
+            <para>To enable shared nothing live migration run the 3 Powershell instructions below on each
+                Hyper-V host:</para>
+            <screen os="windows">
+            <prompt>PS C:\</prompt><userinput>Enable-VMMigration</userinput>
+            </screen>
+                <screen os="windows">
+            <prompt>PS C:\</prompt><userinput>Set-VMMigrationNetwork 192.168.10.1</userinput>
+                </screen>
+                <screen os="windows">
+            <prompt>PS C:\</prompt><userinput>Set-VMHost –VirtualMachineMigrationAuthenticationType
+                    Kerberos</userinput>
+                </screen>
+
+
+            <title>Additional Reading</title>
+            <para>Here's an article that clarifies very well the various live migration options in
+                Hyper-V:</para>
+            <link
+                xlink:href="http://ariessysadmin.blogspot.ro/2012/04/hyper-v-live-migration-of-windows.html"
+                >http://ariessysadmin.blogspot.ro/2012/04/hyper-v-live-migration-of-windows.html</link>
+        
+</section>
+ <section xml:id="python-requirements"><title>"Installation Requirements"></title>
+     <para></para>
         <title>Python 2.7.3</title>
-        <para>Python 2.7.3 must be installed prior to installing the OpenStack Compute Driver on the Hyper-V server.  Download and then install the MSI for windows here:</para>
-         <itemizedlist>
+        <para>Python 2.7.3 must be installed prior to installing the OpenStack Compute Driver on the Hyper-V server.  Download and then install the MSI for windows here:<itemizedlist>
              <listitem>
                  <link xlink:href="http://www.python.org/ftp/python/2.7.3/python-2.7.3.msi" >http://www.python.org/ftp/python/2.7.3/python-2.7.3.msi</link>
              </listitem>
              <listitem>Install the MSI accepting the default options.</listitem>
              <listitem>The installation will put python in C:/python27.</listitem>
          </itemizedlist>
-    </section>
-    
-    <section>    
+        </para>
     <title>Setuptools-0.6c11.win32-py2.7</title>
         <para>You will require pip to install the necessary python module dependencies.  The installer will install under the C:\python27 directory structure. Setuptools for Python 2.7 for Windows can be download from here:</para>
         <link xlink:href="http://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11.win32-py2.7.exe#md5=57e1e64f6b7c7f1d2eddfc9746bbaf20">
             http://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11.win32-py2.7.exe
         </link>
         <para></para>
-    </section>
-    
-    <section>
+
         <title>Python Dependencies</title>
         <para>The following packages need to be downloaded and manually installed</para>
         <itemizedlist>
@@ -66,7 +179,7 @@
             </listitem>
         </itemizedlist>
         
-        <para>The following python packages need to be installed via pip.  Running
+        <para>The following python packages need to be installed via eazy_install or pip.  Running
             c:\Python27\Scripts\pip.exe install "PACKAGENAME" using the packages listed below.
             Please note that you do not need to supply the =="VERSION", it will automatically
             download and install the latest.</para>
@@ -114,89 +227,7 @@
             <listitem>python-cinderclient</listitem>
         </itemizedlist>
     </section>
-    
-    <title>Installation Architecture</title>
-        <para>The following sections will discuss the how to prepare the Windows Hyper-V node for operation as an Openstack Compute node.  Unless stated otherwise, any configuration information should work for both the Windows 2008r2 and 2002 platforms.</para>
-        
-        <section>
-            <title>Configuring the Hyper-V Hyper-V node</title>
-        <para></para>
-        </section>
-        
-        <section>
-            <title>Local Storage Considerations</title>
-            <para>Local storage on the compute node needs to have ample storage for storing the virtual machine images running on the compute nodes.   You may use a sinlge volume for all, or partition it into an OS volume and VM volume.   It is up to the individual deploying to decided.</para>
-        </section>
-    
-        <section>
-        <title>Configure NTP</title>
-            <para>Network time services must be configured to ensure proper operation of the Hyper-V compute node.  To set network time on your Hyper-V host  you will need to run the following commands</para>
-            <itemizedlist>
-                <listitem>net stop w32time</listitem>
-                <listitem>w32tm /config /manualpeerlist:pool.ntp.org,0x8 /syncfromflags:MANUAL</listitem>
-                <listitem>net start w32time</listitem>
-         </itemizedlist>
-        </section>
-   
-        <section>
-            <title>Configuring Your Hyper-V Bridge</title>
-            <para></para>
-        </section>
 
-        <section>
-            <title>Configuring Shared Nothing Live Migration</title>
-            <para>Detailed information on the configuration of livemigration from Microsoft can be found here can be found here:</para>
-                <link xlink:href="http://technet.microsoft.com/en-us/library/jj134199.aspx">http://technet.microsoft.com/en-us/library/jj134199.aspx</link>
-            <title>How does it work:</title>
-            <para>
-            To start a live migration, you just need to issue the following nova command on your controller: 
-            </para>
-            <para>nova live-migration "instanceid" "target_host"</para>
-                <itemizedlist>
-                    <listitem>1) The target hosts ensures that live migration is enabled and properly configured in Hyper-V.</listitem>
-                    <listitem>2) The target hosts checks if the image to be migrated requires a base VHD and pulls it from Glance if not already available on the target host.</listitem>
-                    <listitem>3) The source hosts ensures that live migration is enabled and properly configured in Hyper-V </listitem>
-                    <listitem>4) The source hosts initialtes a Hyper-V live migration</listitem>
-                    <listitem>5) The source hosts communicates to the manager the outcome of the operation</listitem>
-                </itemizedlist>
-                <para>Two comamnd line options/flags were added in order to support Hyper-V live migration:</para>
-                <itemizedlist>
-                    <listitem>
-                        <title>instances_shared_storage</title>
-                        <para>This needed to support "shared nothing" Hyper-V live migrations. It is used in nova/compute/manager.py</para>
-                    </listitem>
-                    <listitem>
-                        <title>limit_cpu_features</title>
-                        <para>This flag is needed to support live migration to hosts with different CPU features. This flag is checked during instance creation in order to limit the CPU features used by the VM.</para>
-                    </listitem>
-                </itemizedlist>
-            
-            <para>
-                <title>Requirements:</title>
-                <itemizedlist>
-                    <listitem>Hyper-V 2012 RC or Windows Server 2012 RC with Hyper-V role enabled</listitem>
-                    <listitem>The instances_path command line option/flag needs to be the the same on all hosts</listitem>
-                    <listitem>The openstack-compute service deployed with the setup MSI must run with domain credentials (see below)</listitem>
-                    <listitem>You can set the service credentials with: sc config openstack-compute obj="DOMAIN\username" password="password"</listitem>
-                </itemizedlist>
-                <title>How to setup live migration on Hyper-V</title>
-                <para>It's very easy. In particular you need only 3 Powershell instructions on each Hyper-V host:</para>
-                <itemizedlist>
-                    <listitem>PS C:\> Enable-VMMigration</listitem>
-                    <listitem>PS C:\> Set-VMMigrationNetwork 192.168.10.1</listitem>
-                    <listitem>PS C:\> Set-VMHost –VirtualMachineMigrationAuthenticationType Kerberos</listitem>
-                    <listitem>Note: you need to setup a domain controller and add the Hyper-V hosts as members</listitem>
-                </itemizedlist>
-                <title>Additional Reading</title>
-                <para>Here's an article that clarifies very well the various live migration options in Hyper-V:</para>
-                <link xlink:href="http://ariessysadmin.blogspot.ro/2012/04/hyper-v-live-migration-of-windows.html">http://ariessysadmin.blogspot.ro/2012/04/hyper-v-live-migration-of-windows.html</link>
-            </para>
-    </section>
-    
-    <section>
-        <title>Configuring Volume Support</title>
-        <para>To prepare the Hyper-V node to be able to attach to volumes provided by nova-volume or cinder you must first make sure the Windows</para>
-    </section>
     
     <title>Installing Nova-compute from source</title>
     <section>
@@ -210,6 +241,7 @@
     </section>
     
     <title>Preparing Images for use with Hyper-V</title>
+    <para>Hyper-V currently supports only the vhd file format for Virtual machine instances.</para>
     <title>Running Compute with Hyper-V</title>
     <title>Troubleshooting Hyper-V Configuration</title>
 
