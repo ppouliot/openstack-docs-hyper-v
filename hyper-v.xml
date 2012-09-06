@@ -256,8 +256,12 @@
         
         <para>On the Compute node that is running Windows, install the following
             dependencies.</para>
-        <itemizedlist><listitem><para>Python 2.6 (32 bit): <link xlink:href="http://www.python.org/download/releases/2.6.6/"
-                        >http://www.python.org/download/releases/2.6.6/</link></para></listitem>
+        <itemizedlist>
+        <listitem>
+        <para>Python 2.6 (32 bit): 
+        <link xlink:href="http://www.python.org/download/releases/2.6.6/">http://www.python.org/download/releases/2.6.6/</link>
+        </para>
+        </listitem>
             <listitem><para>Microsoft Visual C++ 2008 Redistributable Package: <link xlink:href="http://www.microsoft.com/downloads/en/details.aspx?familyid=9B2DA534-3E03-4391-8A4D-074B9F2BC1BF">http://www.microsoft.com/downloads/en/details.aspx?familyid=9B2DA534-3E03-4391-8A4D-074B9F2BC1BF</link></para></listitem>
             <listitem><para>easy_install: <link xlink:href="http://pypi.python.org/pypi/setuptools#files">http://pypi.python.org/pypi/setuptools#files</link></para></listitem>
             <listitem><para>Pywin32 214<link
