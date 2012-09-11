@@ -36,34 +36,34 @@
             compute node. To set network time on your Hyper-V host you will need to run the
             following commands</para>
         <screen os="windows">
-            <prompt>C:\</prompt><userinput>net stop w32time</userinput>
+<prompt>C:\</prompt><userinput>net stop w32time</userinput>
         </screen>
         <screen os="windows">
-            <prompt>C:\</prompt><userinput>w32tm /config /manualpeerlist:pool.ntp.org,0x8 /syncfromflags:MANUAL</userinput>
+<prompt>C:\</prompt><userinput>w32tm /config /manualpeerlist:pool.ntp.org,0x8 /syncfromflags:MANUAL</userinput>
         </screen>
         <screen os="windows">
-            <prompt>C:\</prompt><userinput>net start w32time</userinput>
+<prompt>C:\</prompt><userinput>net start w32time</userinput>
         </screen>
     <title>Configuring Hyper-V Virtual Switching</title>
     <para>Information regarding the Hyper-V virtual Switch can be located here:</para>
     <link xlink:href="http://technet.microsoft.com/en-us/library/hh831823.aspx">http://technet.microsoft.com/en-us/library/hh831823.aspx</link>
     <para>To quickly enable an interface to be used as a Virtual Interface the following powershell may be used:</para>
     <screen os="windows">
-           <prompt>PS C:\</prompt><userinput>$if = Get-NetIPAddress –IPv4Address 192* | Get-NetIPInterface</userinput>
+<prompt>PS C:\</prompt><userinput>$if = Get-NetIPAddress –IPv4Address 192* | Get-NetIPInterface</userinput>
     </screen>
 <screen os="windows">
-        <prompt>PS C:\</prompt><userinput>New-VMSwitch -NetAdapterName $if.ifAlias -Name yourbridgename –AllowManagementOS $false</userinput>
-            </screen>
+<prompt>PS C:\</prompt><userinput>New-VMSwitch -NetAdapterName $if.ifAlias -Name yourbridgename –AllowManagementOS $false</userinput>
+</screen>
     
     
     <title>Enable iSCSI Initator Service</title>
     <para>To prepare the Hyper-V node to be able to attach to volumes provided by nova-volume
         or cinder you must first make sure the Windows iSCSI initiator service is running and started automatically.</para>
     <screen os="windows">
-            <prompt>C:\</prompt><userinput>sc start MSiSCSI</userinput>
+<prompt>C:\</prompt><userinput>sc start MSiSCSI</userinput>
         </screen>
     <screen os="windows">
-            <prompt>C:\</prompt><userinput>sc config MSiSCSI start="auto"</userinput>
+<prompt>C:\</prompt><userinput>sc config MSiSCSI start="auto"</userinput>
         </screen>
 
 
@@ -118,25 +118,27 @@
                 </listitem>
                 <listitem>
                     <para>The openstack-compute service deployed with the setup must run with
-                        domain credentials. You can set the service credentials with: sc config openstack-compute
-                        obj="DOMAIN\username" password="password".</para>
+                        domain credentials. You can set the service credentials with: </para>
+                 <screen os="windows">
+<prompt>C:\</prompt><userinput>sc config openstack-compute obj="DOMAIN\username" password="password"</userinput></screen>
                 </listitem>
             </itemizedlist>
             <title>How to setup live migration on Hyper-V</title>
             <para>To enable shared nothing live migration run the 3 Powershell instructions below on each
                 Hyper-V host:</para>
             <screen os="windows">
-            <prompt>PS C:\</prompt><userinput>Enable-VMMigration</userinput>
+<prompt>PS C:\</prompt><userinput>Enable-VMMigration</userinput>
             </screen>
                 <screen os="windows">
-            <prompt>PS C:\</prompt><userinput>Set-VMMigrationNetwork 192.168.10.1</userinput>
+<prompt>PS C:\</prompt><userinput>Set-VMMigrationNetwork 192.168.10.1</userinput>
                 </screen>
                 <screen os="windows">
-            <prompt>PS C:\</prompt><userinput>Set-VMHost –VirtualMachineMigrationAuthenticationType
-                    Kerberos</userinput>
+<prompt>PS C:\</prompt><userinput>Set-VMHost –VirtualMachineMigrationAuthenticationTypeKerberos</userinput>
                 </screen>
 
-
+<note>
+    <para>Please replace the 192.168.10.1 address witht the address of the interface which will provide the virtual switching for nova-network</para>
+</note>
             <title>Additional Reading</title>
             <para>Here's an article that clarifies very well the various live migration options in
                 Hyper-V:</para>
@@ -189,11 +191,11 @@
                     run the installer.</para>
             </listitem>
         </itemizedlist>
-        
-        <para>The following python packages need to be installed via eazy_install or pip.  Running
-            c:\Python27\Scripts\pip.exe install "PACKAGENAME" using the packages listed below.
-            Please note that you do not need to supply the =="VERSION", it will automatically
-            download and install the latest.</para>
+        <para>The following python packages need to be installed via eazy_install or pip.  Run the following replacing PACKAGENAME with the packages below:</para>
+     <screen os="windows">
+<prompt>C:\</prompt><userinput>c:\Python27\Scripts\pip.exe install "PACKAGENAME"</userinput>
+     </screen>
+      <note><para>Please note that you do not need to supply the =="VERSION", it will automaticallydownload and install the latest.</para></note>
         <itemizedlist>
             <listitem>SQLAlchemy==0.7.8</listitem>
             <listitem>WebOb==1.0.8</listitem>
@@ -237,9 +239,7 @@
             <listitem>wsgiref==0.1.2</listitem>
             <listitem>python-cinderclient</listitem>
         </itemizedlist>
-    </section>
-
-    
+ </section>
     <title>Installing Nova-compute from source</title>
     <section>
         <title>Using git on Windows to retrieve source</title>
@@ -248,11 +248,37 @@
     
     <section>
         <title>Configuring Nova.conf</title>
-        <para></para>
+        <para>Sample Nova.conf for Windows:</para>
+        <para><literal>[DEFAULT]</literal></para> 
+        <para><literal>verbose=true</literal></para>
+        <para><literal>connection_type=hyperv</literal></para>
+        <para><literal>force_raw_images=false</literal></para>
+        <para><literal>auth_strategy=keystone</literal></para>
+        <para><literal>fake_network=true</literal></para>
+        <para><literal>vswitch_name=openstack-br</literal></para>
+        <para><literal>logdir=c:\openstack\</literal></para>
+        <para><literal>state_path=c:\openstack\</literal></para>
+        <para><literal>lock_path=c:\openstack\</literal></para>
+        <para><literal>instances_path=e:\Hyper-V\instances</literal></para>
+        <para><literal>policy_file=C:\Program Files (x86)\OpenStack\nova\etc\nova\policy.json</literal></para>
+        <para><literal>api_paste_config=c:\openstack\nova\etc\nova\api-paste.ini</literal></para>
+        <para><literal>rabbit_host=192.168.1.1</literal></para>
+        <para><literal>glance_api_servers=192.168.1.1:9292</literal></para>
+        <para><literal>image_service=nova.image.glance.GlanceImageService</literal></para>
+        <para><literal>sql_connection=mysql://nova:passwd@192.168.1.1/nova</literal></para>
+        <para><literal>instances_shared_storage=false</literal></para>
+        <para><literal>limit_cpu_features=true</literal></para>
     </section>
-    
+    <section>
     <title>Preparing Images for use with Hyper-V</title>
-    <para>Hyper-V currently supports only the vhd file format for Virtual machine instances.</para>
+    <para>Hyper-V currently supports only the vhd file format for Virtual machine instances.
+        Detailed instructions for installing Virtual Machines on Hyper-V can be found here:</para>
+    <link xlink:href="http://technet.microsoft.com/en-us/library/cc772480.aspx">http://technet.microsoft.com/en-us/library/cc772480.aspx</link>
+    <para>Once you have successfully created a virtual machine, you can then upload the image to glance using using the native glance-client</para>
+    <screen os="windows">
+<prompt>C:\</prompt><userinput>glance add name=MyVM-image is_public=true container_format=bare disk_format=vhd</userinput>
+    </screen>
     <title>Running Compute with Hyper-V</title>
     <title>Troubleshooting Hyper-V Configuration</title>
+    </section>
 </chapter>
