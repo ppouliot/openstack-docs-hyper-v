@@ -215,8 +215,7 @@
       <note><para>Please note that you do not need to supply the =="VERSION", it will automaticallydownload and install the latest.</para></note>
         <itemizedlist>
             <listitem>
-                <para>SQLAlchemy==0.7.8
-                </para>
+                <para>SQLAlchemy==0.7.8</para>
             </listitem>
             <listitem>
                 <para>WebOb==1.0.8</para>
@@ -224,44 +223,120 @@
             <listitem>
                 <para>amqplib==1.0.2</para>
             </listitem>
-            <listitem><para>anyjson==0.3.1</para></listitem>
-            <listitem><para>argparse==1.2.1</para></listitem>
-            <listitem><para>boto==2.1.1</para></listitem>
-            <listitem><para>carrot==0.10.7</para></listitem>
-            <listitem><para>cheetah==2.4.4</para></listitem> 
-            <listitem><para>decorator==3.3.3</para></listitem>
-            <listitem><para>docutils==0.9</para></listitem>
-            <listitem><para>eventlet==0.9.16</para></listitem>
-            <listitem><para>feedparser==5.1.2</para></listitem>
-            <listitem><para>glance==2012.2</para></listitem>
-            <listitem><para>httplib2==0.7.4</para></listitem>
-            <listitem><para>ipython==0.12.1</para></listitem>
-            <listitem><para>iso8601==0.1.4</para></listitem>
-            <listitem><para>jinja2==2.6</para></listitem>
-            <listitem><para>kombu==2.2.0</para></listitem>
-            <listitem><para>lockfile==0.9.1</para></listitem>
-            <listitem><para>logilab-astng==0.23.1</para></listitem>
-            <listitem><para>logilab-common==0.57.1</para></listitem>
-            <listitem><para>lxml==2.3.5</para></listitem>
-            <listitem><para>markdown==2.1.1</para></listitem>
-            <listitem><para>mox==0.5.3</para></listitem>
-            <listitem><para>netaddr==0.7.7</para></listitem>
-            <listitem><para>nose==1.1.2</para></listitem>
-            <listitem><para>pastedeploy==1.5.0</para></listitem>
-            <listitem><para>pep8==1.2</para></listitem>
-            <listitem><para>prettytable==0.6.1</para></listitem>
-            <listitem><para>pygments==1.5</para></listitem>
-            <listitem><para>pylint==0.25.1</para></listitem>
-            <listitem><para>python-novaclient==2012.1</para></listitem>
-            <listitem><para>repoze.lru==0.5</para></listitem>
-            <listitem><para>routes==1.13</para></listitem>
-            <listitem><para>sphinx==1.1.3</para></listitem>
-            <listitem><para>sqlalchemy-migrate==0.7.2</para></listitem>
-            <listitem><para>suds==0.4</para></listitem>
-            <listitem><para>tempita==0.5.1</para></listitem>
-            <listitem><para>wmi==1.4.9</para></listitem>
-            <listitem><para>wsgiref==0.1.2</para></listitem>
-            <listitem><para>python-cinderclient</para></listitem>
+            <listitem>
+                <para>anyjson==0.3.1</para>
+            </listitem>
+            <listitem>
+                <para>argparse==1.2.1</para>
+            </listitem>
+            <listitem>
+                <para>boto==2.1.1</para>
+            </listitem>
+            <listitem>
+                <para>carrot==0.10.7</para>
+            </listitem>
+            <listitem>
+                <para>cheetah==2.4.4</para>
+            </listitem> 
+            <listitem>
+                <para>decorator==3.3.3</para>
+            </listitem>
+            <listitem>
+                <para>docutils==0.9</para>
+            </listitem>
+            <listitem>
+                <para>eventlet==0.9.16</para>
+            </listitem>
+            <listitem>
+                <para>feedparser==5.1.2</para>
+            </listitem>
+            <listitem>
+                <para>glance==2012.2</para>
+            </listitem>
+            <listitem>
+                <para>httplib2==0.7.4</para>
+            </listitem>
+            <listitem>
+                <para>ipython==0.12.1</para>
+            </listitem>
+            <listitem>
+                <para>iso8601==0.1.4</para>
+            </listitem>
+            <listitem>
+                <para>jinja2==2.6</para>
+            </listitem>
+            <listitem>
+                <para>kombu==2.2.0</para>
+            </listitem>
+            <listitem>
+                <para>lockfile==0.9.1</para>
+            </listitem>
+            <listitem>
+                <para>logilab-astng==0.23.1</para>
+            </listitem>
+            <listitem>
+                <para>logilab-common==0.57.1</para>
+            </listitem>
+            <listitem>
+                <para>lxml==2.3.5</para>
+            </listitem>
+            <listitem>
+                <para>markdown==2.1.1</para>
+            </listitem>
+            <listitem>
+                <para>mox==0.5.3</para>
+            </listitem>
+            <listitem>
+                <para>netaddr==0.7.7</para>
+            </listitem>
+            <listitem>
+                <para>nose==1.1.2</para>
+            </listitem>
+            <listitem>
+                <para>pastedeploy==1.5.0</para>
+            </listitem>
+            <listitem>
+                <para>pep8==1.2</para>
+            </listitem>
+            <listitem>
+                <para>prettytable==0.6.1</para>
+            </listitem>
+            <listitem>
+                <para>pygments==1.5</para>
+            </listitem>
+            <listitem>
+                <para>pylint==0.25.1</para>
+            </listitem>
+            <listitem>
+                <para>python-novaclient==2012.1</para>
+            </listitem>
+            <listitem>
+                <para>repoze.lru==0.5</para>
+            </listitem>
+            <listitem>
+                <para>routes==1.13</para>
+            </listitem>
+            <listitem>
+                <para>sphinx==1.1.3</para>
+            </listitem>
+            <listitem>
+                <para>sqlalchemy-migrate==0.7.2</para>
+            </listitem>
+            <listitem>
+                <para>suds==0.4</para>
+            </listitem>
+            <listitem>
+                <para>tempita==0.5.1</para>
+            </listitem>
+            <listitem>
+                <para>wmi==1.4.9</para>
+            </listitem>
+            <listitem>
+                <para>wsgiref==0.1.2</para>
+            </listitem>
+            <listitem>
+                <para>python-cinderclient</para>
+            </listitem>
         </itemizedlist>
  </section>
     
@@ -312,7 +387,7 @@ limit_cpu_features=true
         <para><link xlink:href="http://technet.microsoft.com/en-us/library/cc772480.aspx">http://technet.microsoft.com/en-us/library/cc772480.aspx</link></para>
     <para>Once you have successfully created a virtual machine, you can then upload the image to glance using using the native glance-client</para>
     <screen os="windows">
-<prompt>C:\</prompt><userinput>glance image_create name=MyVM-image is_public=true container_format=bare disk_format=vhd</userinput>
+<prompt>C:\</prompt><userinput>glance image-create --name="<replaceable>VM_IMAGE_NAME</replaceable>" --is-public=true --container-format=bare --disk-format=vhd</userinput>
     </screen>
     </section>
 <section xml:id="running_compute">       
@@ -324,8 +399,14 @@ limit_cpu_features=true
  </section>
         <section>
         <title>Troubleshooting Hyper-V Configuration</title>
-            <para>Missing Smiley Faces for Hyper-V compute nodes when running <literal>nova-manage service list</literal> command on a controller:
-            Please see the following section on <link xlink:href="#configure_ntp">configuring NTP</link> on your Hyper-V compute node.
-            </para>
+           <itemizedlist>
+               <listitem><para>I run the <literal>nova-manage service list</literal> command from my controller however I'm
+                    smissing Smiley faces for Hyper-V compute nodes, what do I do?</para>
+<para><emphasis role="italic">Verify that you are synchronized with a network time source.
+                        Instructions for configuring NTP on your Hyper-V compute node are located
+                            <link xlink:href="#configure_ntp">here</link>
+                    </emphasis></para></listitem>
+           </itemizedlist>
+            
         </section>
 </chapter>
